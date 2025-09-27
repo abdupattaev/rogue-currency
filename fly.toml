@@ -19,7 +19,7 @@ primary_region = "dfw"
   TELEGRAM_BOT_USERNAME = "CurrencyUzb_bot"
 
 # If you want to pin VM resources, uncomment below
-[[vm]]
-  memory = "256mb"
-  cpu_kind = "shared"
-  cpus = 1
+#[[vm]]
+#  memory = "256mb"
+#  cpu_kind = "shared"
+#  cpus = 1
