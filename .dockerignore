@@ -1,0 +1,13 @@
+# Docker context exclusions
+.git
+.gitignore
+.idea
+*.iml
+.target
+*/target
+**/target
+.DS_Store
+.gradle
+.mvn/wrapper
+.mvn
+node_modules
