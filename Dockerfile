@@ -1,32 +1,20 @@
-# syntax=docker/dockerfile:1
-
-# ================
-# Build stage
-# ================
-FROM maven:3.9-eclipse-temurin-21 AS builder
-WORKDIR /app
-
-# Cache dependencies
+# ---- Build stage
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /workspace
 COPY pom.xml .
-RUN mvn -q -e -DskipTests dependency:go-offline || true
-
-# Copy sources and build
+RUN mvn -q -e -DskipTests dependency:go-offline
 COPY src ./src
-RUN mvn -q -e -DskipTests package
+RUN mvn -q -DskipTests clean package
 
-# ================
-# Runtime stage
-# ================
+# ---- Run stage
 FROM eclipse-temurin:21-jre
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=75"
 WORKDIR /app
+# If you use the shade plugin, this will be a single fat jar:
+COPY --from=build /workspace/target/*-SNAPSHOT.jar /app/app.jar
+# If your jar name is fixed, adjust the COPY accordingly.
 
-# Copy the shaded jar produced by the shade plugin
-COPY --from=builder /app/target/*-shaded.jar /app/app.jar
+# (Optional) Health: let Fly see the process is alive
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD pgrep -f "app.jar" >/dev/null || exit 1
 
-# Runtime env vars (Fly secrets will override)
-ENV TELEGRAM_BOT_TOKEN=""
-ENV TELEGRAM_BOT_USERNAME="CurrencyUzb_bot"
-
-# No network listener needed (Telegram long-polling)
 CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
