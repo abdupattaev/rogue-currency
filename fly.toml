@@ -1,25 +1,23 @@
-## Fly.io app configuration for a long-polling Telegram bot
-## Generated for RogueProject
+# fly.toml app configuration file generated for rogue-currency-t95i4a on 2025-09-27T23:39:11Z
 #
-#app = "rogueproject-bot"
-#primary_region = "dfw"
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
-#[build]
-#  # Use Dockerfile in project root
-#  dockerfile = "Dockerfile"
-#
-## No exposed services — this app does not listen on HTTP ports.
-## You can add services later if you introduce an HTTP endpoint.
-#
-#[processes]
-#  app = "java -jar /app/app.jar"
-#
-#[env]
-#  # Set these via `fly secrets set TELEGRAM_BOT_TOKEN=...`
-#  TELEGRAM_BOT_USERNAME = "CurrencyUzb_bot"
-#
-## If you want to pin VM resources, uncomment below
-##[[vm]]
-##  memory = "256mb"
-##  cpu_kind = "shared"
-##  cpus = 1
+
+app = 'rogue-currency-t95i4a'
+primary_region = 'dfw'
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
