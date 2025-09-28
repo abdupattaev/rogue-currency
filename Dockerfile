@@ -10,7 +10,7 @@ RUN mvn -q -DskipTests clean package
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 # If you use the shade plugin, this will be a single fat jar:
-COPY --from=build /workspace/target/*-SNAPSHOT.jar /app/app.jar
+COPY --from=build /workspace/target/*.jar /app/app.jar
 # If your jar name is fixed, adjust the COPY accordingly.
 
 # (Optional) Health: let Fly see the process is alive
